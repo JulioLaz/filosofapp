@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Filosofía</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Cuestionario de Filosofía</h1>
+
+        <div class="header-info">
+            <div class="score-container">
+                Puntaje: <span id="score">0</span>
+            </div>
+            <div class="question-counter-container">
+                Pregunta: <span id="question-counter">0/0</span>
+            </div>
+        </div>
+
+        <div class="timer-container">
+            Tiempo restante: <span id="timer">15</span>
+        </div>
+
+        <div id="question-container">
+            <div id="help-text" class="hide">
+                <h3>Ayuda</h3>
+                <p id="help-paragraph"></p>
+                <div class="actions-container">
+                    <button id="show-question-btn">Ver pregunta</button>
+                    <a href="https://docs.google.com/document/d/1SUaAP6IigAqcy-anqkdadlYMCpgYooGY/edit?usp=sharing&ouid=102564936615803527081&rtpof=true&sd=true" target="_blank" class="text-link-btn">Ver texto completo</a>
+                </div>
+            </div>
+            <h2 id="question-text" class="hide"></h2>
+            <div id="answer-buttons" class="btn-grid hide"></div>
+        </div>
+
+        <div id="result-container" class="hide">
+            <h2>Resultados</h2>
+            <p id="final-score"></p>
+            <button id="restart-btn">Reiniciar</button>
+        </div>
+
+        <button id="home-btn">Volver al inicio</button>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
