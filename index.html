@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -48,5 +48,879 @@
 
     <script src="questions.js"></script>
     <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Filosofía</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 650px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #34495e;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .timer-container {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #ffebee;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+            border: 2px solid #ffcdd2;
+        }
+
+        .timer-container.hidden {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        #question-container {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #help-text {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #4caf50;
+        }
+
+        #help-text h3 {
+            color: #2e7d32;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #help-text h3::before {
+            content: "💡";
+            font-size: 1.2em;
+        }
+
+        #help-paragraph {
+            font-size: 1.1em;
+            color: #2e7d32;
+            text-align: left;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .actions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #show-question-btn, #home-btn, #restart-btn, .text-link-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #show-question-btn:hover, #home-btn:hover, #restart-btn:hover, .text-link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        #home-btn {
+            background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: auto;
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        #home-btn:hover {
+            box-shadow: 0 10px 25px rgba(255, 167, 38, 0.4);
+        }
+
+        #question-text {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+
+        .btn-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            line-height: 1.4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn.correct {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            animation: correctPulse 0.6s ease;
+        }
+
+        .btn.incorrect {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        #result-container {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        #result-container h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        #final-score {
+            font-size: 1.3em;
+            margin-bottom: 25px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+
+        .modal-body {
+            padding: 30px;
+            line-height: 1.6;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #ffeb3b;
+        }
+
+        .modal-body h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .modal-body h3 {
+            color: #e67e22;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .modal-body h4 {
+            color: #9b59b6;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .modal-body ul {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .header-info {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            #home-btn {
+                position: static;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            .modal-content {
+                margin: 2% auto;
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .modal-body {
+                padding: 20px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>🧠 Cuestionario de Filosofía</h1>
+
+        <div class="header-info">
+            <div class="score-container">
+                🎯 Puntaje: <span id="score">0</span>
+            </div>
+            <div class="question-counter-container">
+                📝 Pregunta: <span id="question-counter">0/0</span>
+            </div>
+        </div>
+
+        <div id="timer-display" class="timer-container hidden">
+            ⏱️ Tiempo restante: <span id="timer">30</span> segundos
+        </div>
+
+        <div id="question-container">
+            <div id="help-text" class="hide">
+                <h3>Ayuda</h3>
+                <p id="help-paragraph"></p>
+                <div class="actions-container">
+                    <button id="show-question-btn">📝 Ver pregunta</button>
+                    <button id="show-text-btn" class="text-link-btn">📚 Ver texto completo</button>
+                </div>
+            </div>
+            <h2 id="question-text" class="hide"></h2>
+            <div id="answer-buttons" class="btn-grid hide"></div>
+        </div>
+
+        <div id="result-container" class="hide">
+            <h2>🎉 ¡Resultados!</h2>
+            <p id="final-score"></p>
+            <button id="restart-btn">🔄 Volver a intentar</button>
+        </div>
+
+        <button id="home-btn" class="hide">🏠 Inicio</button>
+    </div>
+
+    <!-- Modal para el texto completo -->
+    <div id="text-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>📖 Material de Estudio</h2>
+            </div>
+            <div class="modal-body">
+                <h2>🌟 UNIDAD III: Ética – ¿Cómo debe comportarse el ser humano?</h2>
+                
+                <h3>🔎 Tema 1: Los problemas éticos</h3>
+                
+                <div class="highlight-box">
+                    <h4>📌 Caso: El dilema de Juan</h4>
+                    <p><strong>Juan va al aeropuerto porque su padre está muy grave en Salta. De pronto atropella a un niño.</strong></p>
+                    
+                    <p><strong>El dilema:</strong></p>
+                    <ul>
+                        <li>🚑 <strong>Opción 1:</strong> Llevar al niño al hospital → pierde el avión, no se despide de su padre.</li>
+                        <li>✈️ <strong>Opción 2:</strong> Ir al aeropuerto → salva el momento con su padre, pero abandona al niño herido.</li>
+                    </ul>
+                    
+                    <p><strong>👉 Preguntas para reflexionar:</strong></p>
+                    <ul>
+                        <li>¿Qué debería haber hecho Juan? ¿Por qué?</li>
+                        <li>¿Creés que Juan eligió libremente o fue forzado por las circunstancias?</li>
+                        <li>Si hubiera actuado de otro modo al que pensás correcto, ¿habría obrado mal? ¿Por qué?</li>
+                    </ul>
+                    
+                    <p><strong>💡 Idea clave:</strong> Los dilemas morales son situaciones donde ninguna opción es claramente buena o mala, y nos obligan a pensar qué valores priorizamos.</p>
+                </div>
+
+                <h3>🧭 Libertad y Responsabilidad</h3>
+                <ul>
+                    <li>⚡ <strong>Una piedra que cae y mata a alguien:</strong> accidente (no hay intención).</li>
+                    <li>👊 <strong>Un hombre que golpea a otro hasta matarlo:</strong> acto moral (hubo elección).</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <h4>📌 Diferencia:</h4>
+                    <ul>
+                        <li><strong>Naturaleza</strong> → actúa por leyes físicas (no hay libertad).</li>
+                        <li><strong>Ser humano</strong> → elige, tiene intenciones (sí hay libertad).</li>
+                    </ul>
+                    <p><strong>Por eso sólo los seres humanos son responsables de sus actos.</strong></p>
+                </div>
+
+                <h3>🗣️ Tres visiones sobre la libertad</h3>
+                
+                <h4>A. Jean Paul Sartre (🌌 Existencialismo)</h4>
+                <ul>
+                    <li>"El hombre está condenado a ser libre".</li>
+                    <li>No hay reglas prefijadas, debemos inventar nuestra propia moral.</li>
+                    <li>Cada decisión nos hace responsables.</li>
+                </ul>
+
+                <h4>B. B. F. Skinner (🐭 Conductismo)</h4>
+                <ul>
+                    <li>El ser humano está condicionado por leyes psicológicas y el ambiente.</li>
+                    <li>La libertad es una ilusión: nuestra conducta puede ser predicha y moldeada.</li>
+                </ul>
+
+                <h4>C. Erich Fromm (🤝 Humanismo)</h4>
+                <ul>
+                    <li>Estamos condicionados por el contexto social, pero conservamos libertad.</li>
+                    <li>Podemos elegir y crear normas morales humanas, basadas en lo que es bueno para las personas.</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <h4>👉 Actividad:</h4>
+                    <ul>
+                        <li>¿Con cuál de estas tres posturas estás más de acuerdo?</li>
+                        <li>Justificá tu elección con un argumento.</li>
+                        <li>Da un ejemplo real o imaginado que refuerce tu idea.</li>
+                    </ul>
+                </div>
+
+                <h3>⚠️ Problemas éticos cotidianos</h3>
+                <ul>
+                    <li>🏢 <strong>Abuso de poder:</strong> usar un cargo para favorecer o pisotear.</li>
+                    <li>💸 <strong>Soborno:</strong> aceptar regalos a cambio de favores.</li>
+                    <li>👨‍👩‍👧 <strong>Nepotismo:</strong> contratar a familiares sin mérito.</li>
+                    <li>🤐 <strong>Encubrimiento:</strong> callar frente a la corrupción o injusticia.</li>
+                    <li>😡 <strong>Egoísmo:</strong> pensar solo en el beneficio propio.</li>
+                    <li>📉 <strong>Incompetencia:</strong> trabajar mal y perjudicar a los demás.</li>
+                </ul>
+
+                <h3>🌱 Principios éticos básicos</h3>
+                <ul>
+                    <li>🤝 <strong>Honestidad:</strong> reconocer errores y límites.</li>
+                    <li>🛡️ <strong>Integridad:</strong> no traicionar los valores.</li>
+                    <li>🔥 <strong>Compromiso:</strong> cumplir promesas y deberes.</li>
+                    <li>⚖️ <strong>Ecuanimidad:</strong> ser justos e imparciales.</li>
+                    <li>🙌 <strong>Respeto:</strong> valorar la dignidad y libertad ajena.</li>
+                    <li>📚 <strong>Excelencia:</strong> dar lo mejor de uno mismo.</li>
+                    <li>🌍 <strong>Responsabilidad ciudadana:</strong> cumplir con las leyes y aportar a la sociedad.</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <h3>🎯 Idea final</h3>
+                    <p><strong>La ética no es solo teoría: es decidir cómo vivir y convivir.</strong></p>
+                    
+                    <p><strong>El ser humano es libre y responsable:</strong></p>
+                    <ul>
+                        <li>Ante sí mismo 🪞</li>
+                        <li>Ante los demás 👥</li>
+                        <li>Y (para quienes creen) ante Dios ✝️</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionContainer = document.getElementById('question-container');
+        const questionText = document.getElementById('question-text');
+        const answerButtons = document.getElementById('answer-buttons');
+        const helpTextContainer = document.getElementById('help-text');
+        const helpParagraph = document.getElementById('help-paragraph');
+        const showQuestionBtn = document.getElementById('show-question-btn');
+        const showTextBtn = document.getElementById('show-text-btn');
+        const timerDisplay = document.getElementById('timer-display');
+        const timerElement = document.getElementById('timer');
+        const scoreElement = document.getElementById('score');
+        const questionCounterElement = document.getElementById('question-counter');
+        const resultContainer = document.getElementById('result-container');
+        const finalScoreElement = document.getElementById('final-score');
+        const restartButton = document.getElementById('restart-btn');
+        const homeButton = document.getElementById('home-btn');
+        const textModal = document.getElementById('text-modal');
+        const closeModal = document.querySelector('.close');
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timer;
+        const timeLimit = 30;
+
+        // Array de preguntas con el párrafo de ayuda (hint)
+        const questions = [
+            {
+                question: "En el dilema presentado, la situación de Juan ilustra una colisión entre dos deberes o responsabilidades. ¿Cuál de los siguientes principios éticos podría ser considerado predominante en la Solución n.º 1, donde Juan elige llevar al niño al hospital?",
+                answers: [
+                    { text: "Prioridad de los lazos familiares sobre el bienestar de un desconocido.", correct: false },
+                    { text: "Aplicación de una ética utilitarista que busca el mayor bien para el mayor número de personas.", correct: false },
+                    { text: "Adhesión a una norma moral absoluta que prohíbe el abandono de una persona herida.", correct: true },
+                    { text: "Un ejemplo de egoísmo ético, donde se prioriza la conciencia individual sobre el resultado de la acción.", correct: false },
+                    { text: "Una acción irresponsable, ya que no considera las consecuencias emocionales de no despedirse de su padre.", correct: false }
+                ],
+                hint: "Considera la acción de Juan en la Solución n.º 1. Elige la opción que mejor describa la motivación subyacente para su comportamiento."
+            },
+            {
+                question: "¿Cuál es la diferencia fundamental que distingue los actos morales de los fenómenos naturales según el texto?",
+                answers: [
+                    { text: "Los fenómenos naturales pueden ser considerados 'malos' en ciertas circunstancias, mientras que los actos humanos son siempre neutros.", correct: false },
+                    { text: "Los fenómenos naturales son intencionales, mientras que los actos morales son involuntarios.", correct: false },
+                    { text: "Los actos morales suponen intenciones subjetivas y dependen de la libertad y la elección, mientras que los fenómenos naturales están determinados por causas invariables.", correct: true },
+                    { text: "Los actos morales son el resultado de leyes físicas inalterables, y los fenómenos naturales son impredecibles.", correct: false },
+                    { text: "Los actos morales son solo aquellos que tienen consecuencias negativas, mientras que los fenómenos naturales no tienen impacto en los seres humanos.", correct: false }
+                ],
+                hint: "Analiza el ejemplo de la piedra y el andinista. Piensa en la diferencia fundamental en el control o la voluntad que cada uno tiene sobre sus acciones."
+            },
+            {
+                question: "Según el texto, la principal razón por la que podemos emitir juicios morales sobre las acciones de una persona es que...",
+                answers: [
+                    { text: "tienen consecuencias visibles en otras personas.", correct: false },
+                    { text: "la mayoría de la sociedad está de acuerdo en que el acto fue bueno o malo.", correct: false },
+                    { text: "la persona que actúa es libre y puede asumir la responsabilidad de sus actos.", correct: true },
+                    { text: "las acciones son siempre intencionales.", correct: false },
+                    { text: "los actos fueron realizados en un contexto social y político determinado.", correct: false }
+                ],
+                hint: "Recuerda el ejemplo del andinista que se desmaya. ¿Qué lección se extrae de ese caso con respecto a la intencionalidad y la responsabilidad?"
+            },
+            {
+                question: "Jean-Paul Sartre sostiene que el hombre está 'condenado a ser libre'. ¿Cuál de las siguientes afirmaciones se desprende lógicamente de esta posición filosófica?",
+                answers: [
+                    { text: "Los seres humanos pueden elegir no ser libres si así lo desean.", correct: false },
+                    { text: "Las normas morales son establecidas por una autoridad divina para guiar la conducta humana.", correct: false },
+                    { text: "La libertad es una ilusión, ya que la conducta humana está totalmente determinada.", correct: false },
+                    { text: "El hombre es el único responsable de inventar y seguir su propia moral, ya que no existen normas previas que lo guíen.", correct: true },
+                    { text: "La responsabilidad moral solo surge cuando el hombre se adhiere a las normas de su comunidad.", correct: false }
+                ],
+                hint: "Considera la frase 'condenado a ser libre'. ¿Qué significa para Sartre que no hay una moral preexistente?"
+            },
+            {
+                question: "Erik Fromm presenta una posición intermedia en el debate sobre la libertad y el determinismo. ¿Qué implicación tiene su visión para el juicio moral en un contexto social y político como el de la Alemania nazi?",
+                answers: [
+                    { text: "Los ciudadanos alemanes no podían ser juzgados moralmente porque su contexto socio-político los determinaba completamente.", correct: false },
+                    { text: "La ética humanista de Fromm es compatible con un determinismo total, ya que se centra en lo que es bueno para los seres humanos.", correct: false },
+                    { text: "Los ciudadanos alemanes podían elegir adherir o no al nazismo, lo que les permitía ser considerados moralmente responsables de sus acciones.", correct: true },
+                    { text: "El contexto socio-político elimina la responsabilidad moral, por lo que el nazismo no puede ser juzgado como moralmente malo.", correct: false },
+                    { text: "Fromm argumenta que la agresión humana es incontrolable en contextos autoritarios, lo que hace imposible el juicio moral.", correct: false }
+                ],
+                hint: "Analiza la diferencia entre la posición de Fromm y la de Skinner. ¿De qué manera la visión de Fromm sobre la libertad y el contexto se aplica al ejemplo del nazismo?"
+            },
+            {
+                question: "El texto menciona que una de las condiciones para que un acto sea considerado bueno o malo es que 'tenga consecuencias o efectos posibles sobre otras personas'. ¿Qué implicación tiene esta condición para la moralidad de los 'pensamientos que no se expresan'?",
+                answers: [
+                    { text: "Los pensamientos no pueden ser considerados moralmente buenos o malos porque no cumplen la segunda condición del juicio moral.", correct: true },
+                    { text: "Un pensamiento malvado es moralmente malo incluso si nunca se manifiesta.", correct: false },
+                    { text: "Los pensamientos solo se vuelven moralmente relevantes cuando se convierten en actos intencionales.", correct: false },
+                    { text: "La segunda condición es irrelevante, ya que la libertad y la responsabilidad son suficientes para el juicio moral.", correct: false },
+                    { text: "La única condición para el juicio moral es que el acto sea realizado por un agente libre y responsable.", correct: false }
+                ],
+                hint: "¿Qué ejemplos da el texto sobre actos que son 'exclusivamente privados' y por qué los excluye del juicio moral?"
+            },
+            {
+                question: "Según la definición proporcionada, un conflicto de intereses ocurre cuando...",
+                answers: [
+                    { text: "una persona utiliza su puesto para favorecer a otros, sin buscar un beneficio propio.", correct: false },
+                    { text: "se acepta un obsequio a cambio de un favor, lo cual es considerado soborno.", correct: false },
+                    { text: "una persona emite normas en su trabajo que le benefician directamente, como participar en la contratación de un familiar.", correct: true },
+                    { text: "una persona recluta a muchos miembros de su familia en una institución.", correct: false },
+                    { text: "un empleado miente para encubrir una conducta inapropiada de su supervisor.", correct: false }
+                ],
+                hint: "El texto proporciona una lista detallada de problemas éticos. Revisa esa lista y busca la definición que se ajusta a 'conflicto de intereses'."
+            },
+                            {
+                question: "El principio de integridad, según el texto, implica:",
+                answers: [
+                    { text: "Aceptar las debilidades y limitaciones propias.", correct: false },
+                    { text: "Definir los valores de la institución por encima de los propios.", correct: false },
+                    { text: "Defender las creencias y valores personales, y rechazar la idea de que el fin justifica los medios.", correct: true },
+                    { text: "Mentir para proteger a un compañero o a la organización.", correct: false },
+                    { text: "Priorizar la eficacia y el éxito sobre la moralidad.", correct: false }
+                ],
+                hint: "En la sección de 'principios éticos', busca la definición de 'integridad'. ¿Qué acción se opone a ella?"
+            },
+            {
+                question: "El texto argumenta que un determinismo total nos impediría emitir juicios morales porque...",
+                answers: [
+                    { text: "la moralidad solo se aplica a los fenómenos naturales, no a las acciones humanas.", correct: false },
+                    { text: "los actos humanos, al no ser libres, serían moralmente neutros, como los fenómenos naturales.", correct: true },
+                    { text: "el ser humano es por naturaleza incapaz de conocer las leyes que rigen su conducta.", correct: false },
+                    { text: "las acciones de una persona son siempre intencionales, incluso si parecen determinadas.", correct: false },
+                    { text: "no se podría condenar a alguien por un asesinato, ya que no se podría probar que fue un acto intencional.", correct: false }
+                ],
+                hint: "Piensa en la diferencia entre una piedra que cae y un ser humano que toma una decisión. ¿Qué papel juega la libertad en esta distinción?"
+            },
+            {
+                question: "El principio de 'Responsabilidad ciudadana' implica, además de respetar y obedecer las leyes, tener conciencia social. ¿Qué problema ético de los enumerados podría ser mitigado al aplicar este principio?",
+                answers: [
+                    { text: "Nepotismo.", correct: false },
+                    { text: "Lealtad excesiva.", correct: false },
+                    { text: "Egoísmo.", correct: true },
+                    { text: "Encubrimiento.", correct: false },
+                    { text: "Soborno.", correct: false }
+                ],
+                hint: "Piensa en el significado de 'conciencia social'. ¿Cuál de los problemas éticos listados está más directamente relacionado con la falta de consideración por el bienestar de la comunidad o los demás?"
+            }
+        ];
+
+        // Función para mezclar las respuestas de manera aleatoria
+        function shuffleAnswers(question) {
+            const shuffled = [...question.answers];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return { ...question, answers: shuffled };
+        }
+
+        // Función para actualizar el contador de preguntas
+        function updateQuestionCounter() {
+            questionCounterElement.innerText = `${currentQuestionIndex + 1}/${questions.length}`;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreElement.innerText = score;
+            resultContainer.classList.add('hide');
+            homeButton.classList.add('hide');
+            timerDisplay.classList.add('hidden');
+            showHelpText();
+        }
+
+        function showHelpText() {
+            resetState();
+            const currentQuestion = questions[currentQuestionIndex];
+            helpParagraph.innerText = currentQuestion.hint;
+            helpTextContainer.classList.remove('hide');
+            updateQuestionCounter();
+            showQuestionBtn.addEventListener('click', showQuestion, { once: true });
+        }
+
+        function showQuestion() {
+            helpTextContainer.classList.add('hide');
+            questionText.classList.remove('hide');
+            answerButtons.classList.remove('hide');
+            timerDisplay.classList.remove('hidden');
+            homeButton.classList.remove('hide');
+
+            const currentQuestion = shuffleAnswers(questions[currentQuestionIndex]);
+            questionText.innerText = currentQuestion.question;
+            startTimer();
+
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('btn');
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener('click', selectAnswer);
+                answerButtons.appendChild(button);
+            });
+        }
+
+        function resetState() {
+            while (answerButtons.firstChild) {
+                answerButtons.removeChild(answerButtons.firstChild);
+            }
+            questionText.classList.add('hide');
+            answerButtons.classList.add('hide');
+            timerDisplay.classList.add('hidden');
+            clearTimeout(timer);
+        }
+
+        function selectAnswer(e) {
+            clearTimeout(timer);
+            const selectedButton = e.target;
+            const isCorrect = selectedButton.dataset.correct === "true";
+
+            if (isCorrect) {
+                score++;
+                scoreElement.innerText = score;
+            }
+
+            Array.from(answerButtons.children).forEach(button => {
+                setStatusClass(button, button.dataset.correct === "true");
+                button.disabled = true;
+            });
+
+            setTimeout(() => {
+                nextQuestion();
+            }, 2500);
+        }
+
+        function setStatusClass(element, correct) {
+            element.classList.remove('correct');
+            element.classList.remove('incorrect');
+            if (correct) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showHelpText();
+            } else {
+                showResults();
+            }
+        }
+
+        function startTimer() {
+            let timeLeft = timeLimit;
+            timerElement.innerText = timeLeft;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.innerText = timeLeft;
+                
+                // Cambiar color del timer cuando queda poco tiempo
+                if (timeLeft <= 10) {
+                    timerDisplay.style.background = '#ffcdd2';
+                    timerDisplay.style.borderColor = '#f44336';
+                } else if (timeLeft <= 20) {
+                    timerDisplay.style.background = '#fff3e0';
+                    timerDisplay.style.borderColor = '#ff9800';
+                }
+                
+                if (timeLeft <= 0) {
+                    clearTimeout(timer);
+                    Array.from(answerButtons.children).forEach(button => {
+                        setStatusClass(button, button.dataset.correct === "true");
+                        button.disabled = true;
+                    });
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 2500);
+                }
+            }, 1000);
+        }
+
+        function showResults() {
+            questionContainer.classList.add('hide');
+            resultContainer.classList.remove('hide');
+            homeButton.classList.remove('hide');
+            timerDisplay.classList.add('hidden');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = "";
+            
+            if (percentage >= 90) {
+                message = "¡Excelente! 🌟 Dominas muy bien los conceptos éticos.";
+            } else if (percentage >= 70) {
+                message = "¡Muy bien! 👏 Tienes un buen entendimiento de la ética.";
+            } else if (percentage >= 50) {
+                message = "Bien 👍 Pero puedes mejorar repasando el material.";
+            } else {
+                message = "📚 Te recomiendo estudiar más el material antes de volver a intentar.";
+            }
+            
+            finalScoreElement.innerHTML = `
+                <div style="font-size: 1.5em; margin-bottom: 15px;">${message}</div>
+                <div>Tu puntaje: ${score} de ${questions.length} (${percentage}%)</div>
+            `;
+        }
+
+        // Event listeners para el modal
+        showTextBtn.addEventListener('click', () => {
+            textModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            textModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === textModal) {
+                textModal.style.display = 'none';
+            }
+        });
+
+        restartButton.addEventListener('click', startQuiz);
+        homeButton.addEventListener('click', () => {
+            resetState();
+            startQuiz();
+        });
+
+        // Iniciar el quiz
+        startQuiz();
+    </script>
 </body>
 </html>
